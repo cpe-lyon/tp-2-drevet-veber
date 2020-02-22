@@ -48,7 +48,7 @@
 9. `unset` supprime la variable, elle n'existe plus. Affecter une chaîne vide à une variable crée quand même une variable, mais vide. Afficher une variable supprimée n'affichera rien tandis qu'afficher une variable vide donnera un retour à la ligne.
 
 10. \> `echo '$HOME'" = $HOME"`
-`$HOME = /home/vebervi`
+<br>`$HOME = /home/vebervi`
 
 ## Programmation Bash
 
