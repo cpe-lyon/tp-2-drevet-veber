@@ -54,7 +54,151 @@
 
 Pour rajouter noter dossier *script* à la variable *PATH*, on va rajouter `PATH=$PATH:~/script` à la fin du fichier *.bashrc* puis on exécute la commande `source .bashrc` afin que la modification soit prise en compte.
 
+*ne pas oublier le `chmod u+x script.sh` pour pouvoir exécuter le script*
+
 ### Exercice 2 - Contrôle de mot de passe
-<br><br>
+
+*testpwd.sh*
+```
+#!/bin/bash
+
+PASSWORD=test
+read -sp 'Entrez un mot de passe : ' usrPwd
+if [ "$usrPwd" == "$PASSWORD" ]; then
+	echo -e "\nC'est le bon mot de passe !"
+else
+	echo -e "\nCe n'est pas le bon mot de passe !"
+fi
+```
+
+### Exercice 3 - Expressions rationnelles
+
+*tp2ex3.sh*
+```
+#!/bin/bash
+
+function is_number()
+{
+	re='^[+-]?[0-9]+([.][0-9]+)?$'
+	if ! [[ $1 =~ $re ]] ; then
+		echo 1
+	else
+		echo 0
+	fi
+}
+
+if [[ $( is_number $1 ) -eq 0 ]]; then
+	echo "C'est un nombre réel"
+else
+	echo "Ce n'est pas un nombre réel"
+fi
+```
+
+### Exercice 4 - Contrôle d’utilisateur
+
+*tp2ex4.sh*
+```
+#!/bin/bash
+
+if [[ -z $1 ]]; then
+	echo "Utilisation : $0 nom_utilisateur"
+else
+	if [[ -n $(cut -d : -f 1 /etc/passwd | grep ^$1$) ]]; then
+		echo "Un utilisateur porte ce nom"
+	else
+		echo "Pas d'utilsateur trouvé portant ce nom"
+	fi
+fi
+```
+
+### Exercice 5 - Factorielle
+
+*tp2ex5.sh*
+```
+#!/bin/bash
+
+acc=1
+for i in $(seq 1 $1)
+do
+	acc=$(( $i * $acc ))
+done
+
+echo "Factorielle $1 = $acc"
+```
+
+### Exercice 6 - Le juste prix
+
+*tp2ex6.sh*
+```
+#!/bin/bash
+
+price=$(( $RANDOM % 1000 ))
+echo "Trouvez le juste prix entre 1 et 1000"
+
+while [[ $price != $usrPrice ]]
+do
+	read -p "Votre prix : " usrPrice
+
+	if [[ $price -gt $usrPrice ]]; then
+			echo "C'est plus que $usrPrice"
+	elif [[ $price -lt $usrPrice ]]; then
+		echo "C'est moins que $usrPrice"
+	fi
+done
+
+echo "C'est gagne ! Le juste prix etait $price"
+```
+
+### Exercice 7 - Statistiques
+
+*tp2ex7.sh*
+```
+#!/bin/bash
+
+function is_number()
+{
+	re='^[+-]?[0-9]+([.][0-9]+)?$'
+	if ! [[ $1 =~ $re ]] ; then
+		echo 1
+	else
+		echo 0
+	fi
+}
+
+tab=()
+while (("$#")) ;
+do
+	if [[ $( is_number $1 ) != 0 ]]; then
+		echo "Un des nombres passés en paramètre nest pas un réel."
+		exit
+	fi
+
+	tab+=($1)
+	shift
+done
+
+acc=0 
+min=${tab[0]}
+max=${tab[0]}
+for i in "${!tab[@]}"
+do
+	tmp=${tab[$i]}
+	acc=$([ $tmp + $acc ))
+	if [[ $tmp -lt $min ]]; then
+		min=$tmp
+	elif [[ $tmp -gt $max ]]; then
+		max=$tmp
+	fi
+done
+
+moy=$(( $acc / ${#tab[*]} ))
+
+echo "Tableau : ${tab[*]}"
+echo "Nombre de termes : ${#tab[*]}"
+echo "Min : $min"
+echo "Max : $max"
+echo "Moyenne : $moy"
+```
+
 ##### DREVET Yoann
 ##### VEBER Vincent
